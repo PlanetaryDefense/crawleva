@@ -71,17 +71,13 @@ while True:
         roundList.append(data[rowMarker][:])
         rowMarker+=1
         if(rowMarker == len(data)-1):
-            #print("here")
             break
-        #print("on row " + str(rowMarker))
     roundList.append(data[rowMarker][:]) # takes care of appending final round value
     if roundMarker > 1: # skip the first round, which are seed URLs
         writeSamples(roundList) # pass specific round array for sampling
     if rowMarker == len(data) - 1:
-        #print("here")
         break
     roundMarker += 1
     rowMarker+=1
-    #print(roundMarker)
     
 writeSampleCSV(sampleArr)
