@@ -5,7 +5,7 @@ random samples of each round, arranged by the round.  The output dataset is
 put into another program in order to calculate the accuracy of the webcrawler for
 each round after the output dataset is manually evaluated
 
-@author: Joseph Geore
+@author: Joseph George
 """
 
 import csv
