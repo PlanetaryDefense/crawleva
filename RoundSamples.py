@@ -11,7 +11,8 @@ each round after the output dataset is manually evaluated
 import csv
 from tkinter import filedialog
 from tkinter import *
-from random import randint
+import random
+import sys
 
 def readFile():
     """
@@ -40,9 +41,11 @@ def writeSamples(crawlRoundArray):
         crawlRoundArray: array containing all crawls from same round
     """
     sampleSize = int(len(crawlRoundArray) * .10) # sample size is 10% of total population
-    for i in  range(0, sampleSize):
-        randomNum = randint(0,len(crawlRoundArray)-1)
-        sampleArr.append(crawlRoundArray[randomNum][:])
+    randNumIndexes = random.sample(range(0, len(crawlRoundArray)), sampleSize) # sample without replacement 
+    print(randNumIndexes)
+    sys.exit()
+    for i in  range(0, len(randNumIndexes)):
+        sampleArr.append(crawlRoundArray[randNumIndexes[i]][:])
         
 def writeSampleCSV(sampleArray):
     """
