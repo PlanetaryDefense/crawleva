@@ -12,7 +12,6 @@ import csv
 from tkinter import filedialog
 from tkinter import *
 import random
-import sys
 
 def readFile():
     """
@@ -42,8 +41,6 @@ def writeSamples(crawlRoundArray):
     """
     sampleSize = int(len(crawlRoundArray) * .10) # sample size is 10% of total population
     randNumIndexes = random.sample(range(0, len(crawlRoundArray)), sampleSize) # sample without replacement 
-    print(randNumIndexes)
-    sys.exit()
     for i in  range(0, len(randNumIndexes)):
         sampleArr.append(crawlRoundArray[randNumIndexes[i]][:])
         
