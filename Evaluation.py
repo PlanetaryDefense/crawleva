@@ -49,31 +49,39 @@ def calcRelevant(listInput, roundMark):
             successNum = successNum + 1
             
     p = successNum/len(listInput) # percentage of relevant webpages
+    p_array.append(p)
     
     # calculate the margin of error for evaluation calculation
     z_score = 1.96 # 95% desired confidence interval
-    confidenceInterval = (z_score*cmath.sqrt((p*(1-p))/(len(listInput)))).real
-    lowerBound = p - confidenceInterval
-    upperBound = p + confidenceInterval
+    n = len(listInput) # total sample size
     
-    results = "Round " + str(roundMark) + " is around " + str(p * 100) + "% accurate with a confidence interval of (" + str(lowerBound) + ", " + str(upperBound) + ")"
+    lowerBound = (2*n*p+(z_score**2)-z_score*cmath.sqrt((z_score**2)-(1/n)+4*n*p*(1-p)+(4*p-2)).real+1) /(2*(n+z_score**2))
+    upperBound = (2*n*p+(z_score**2)+z_score*cmath.sqrt((z_score**2)-(1/n)+4*n*p*(1-p)-(4*p-2)).real+1) /(2*(n+z_score**2))
+    results = [str(roundMark), str(p * 100),str(lowerBound*100), str(upperBound*100), n]
+    
     evaluationArray.append(results) # append results to array which will be printed to text file
     
 def writeEvaluation(evalArr):
     """
-    Writes the results of the crawler evaluation to text file
+    Writes the results of the crawler evaluation to CSV file in this order:
+    Round Number, P-Value, Lower Bound, Upper Bound, Sample Size for Round
     
     Args:
         evalArr: array containing results of crawler evaluation per round
     """
-    # make sure there is a blank "results.txt" file in working directory to save to!
-    with open('results.txt', mode='wt', encoding='utf-8') as outFile:
-        for lines in evalArr:
-            outFile.write(lines)
-            outFile.write('\n')
+    with open(r'C:\JG_STC_Work\crawleva\CSVresults\output.csv', "w") as output:
+        writer = csv.writer(output, lineterminator='\n')
+        writer.writerows(evalArr)
+
+def calcAveSuccess(p_vals):
+    pTotal = 0
+    for i in range(0,len(p_vals)):
+        pTotal += p_vals[i]
+    return pTotal
 
 data = readFile() # read in the CSV file data
 evaluationArray = [] #holds crawler evaluation results per round
+p_array = []
 
 rowMarker = 0
 roundMarker = 2
@@ -94,3 +102,5 @@ while True:
     rowMarker+=1
     
 writeEvaluation(evaluationArray)
+pNum = calcAveSuccess(p_array)
+print("The overall percent of success is: " + str((pNum/len(p_array))*100))
